@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESOL ICT Self-Access Assessment</title>
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --card: #fff;
+      --ink: #1f2937;
+      --ink-soft: #4b5563;
+      --brand: #2563eb;
+      --ok: #16a34a;
+      --bad: #dc2626;
+      --muted: #e5e7eb;
+    }
+    html, body {
+      box-sizing: border-box;
+      margin: 0;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      padding: 20px;
+    }
+    .title {
+      font-size: clamp(22px, 3.5vw, 34px);
+      margin: 0 0 6px 0;
+    }
+    .sub {
+      color: var(--ink-soft);
+      margin: 0 0 18px 0;
+    }
+    .screen {
+      display: none;
+    }
+    .screen.active {
+      display: block;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 600;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 16px;
+      cursor: pointer;
+      background: var(--brand);
+      color: #fff;
+      min-width: 140px;
+      transition: .15s;
+    }
+    .btn:focus {
+      outline: 3px solid #a7c0ff;
+      outline-offset: 2px;
+    }
+    .center {
+      display: flex;
+      justify-content: center;
+    }
+    .option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 2px solid var(--muted);
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 120px;
+      background: #fff;
+      cursor: pointer;
+      transition: .15s;
+    }
+    .option:hover {
+      border-color: #c7d2fe;
+    }
+    .option[aria-pressed="true"] {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px #dbeafe;
+    }
+    .emoji {
+      font-size: 42px;
+      line-height: 1.1;
+    }
+    .field {
+      display: block;
+      width: 100%;
+      border: 2px solid var(--muted);
+      border-radius: 12px;
+      padding: 14px 12px;
+      font-size: 18px;
+    }
+    .score {
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #eef2ff;
+      display: inline-block;
+    }
+    .fake-link {
+      color: #2563eb !important;
+      text-decoration: underline !important;
+      font-weight: 600;
+    }
+    .option[aria-pressed="true"] .fake-link {
+      color: #1e40af !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+
+      <!-- Screen 0: Start -->
+      <section id="s0" class="screen active" aria-labelledby="s0h">
+        <h2 id="s0h">Start</h2>
+        <p>Before you begin, please enter your <strong>name</strong> and <strong>student number</strong>.</p>
+        <div>
+          <label for="studentName" class="hint">Your name</label>
+          <input id="studentName" class="field" type="text" placeholder="e.g. Fatima Ali" aria-label="Your name" required>
+        </div>
+        <div>
+          <label for="studentId" class="hint">Student number</label>
+          <input id="studentId" class="field" type="text" placeholder="e.g. 12345678" aria-label="Student number" required>
+        </div>
+        <button class="btn" id="startBtn" disabled>Start</button>
+      </section>
+
+      <!-- Screen 1: Click a computer image -->
+      <section id="s1" class="screen" aria-labelledby="s1h">
+        <h2 id="s1h">Mouse / Touchpad</h2>
+        <p>Click the picture of a <strong>computer</strong>. Then press <strong>Next</strong>.</p>
+        <button class="option" id="phoneBtn"><div class="emoji" aria-hidden="true">📱</div>Phone</button>
+        <button class="option" id="computerBtn"><div class="emoji" aria-hidden="true">💻</div>Computer</button>
+        <button class="option" id="carBtn"><div class="emoji" aria-hidden="true">🚗</div>Car</button>
+        <button class="btn" id="next1Btn">Next</button>
+      </section>
+
+      <!-- Screen 2: Type name -->
+      <section id="s2" class="screen" aria-labelledby="s2h">
+        <h2 id="s2h">Keyboard</h2>
+        <p>Type your <strong>first name</strong> here, then press <strong>Enter</strong> or click <strong>Next</strong>.</p>
+        <input id="nameInput" class="field" type="text" autocomplete="off" aria-label="First name">
+        <button class="btn" id="next2Btn">Next</button>
+      </section>
+
+      <!-- Screen 3: Fake search -->
+      <section id="s3" class="screen" aria-labelledby="s3h">
+        <h2 id="s3h">Internet</h2>
+        <p>Search for <strong>New City College</strong>. Type the words and press Next.</p>
+        <input id="searchBox" class="field" type="text" placeholder="Type here and press Enter" aria-label="Search">
+        <button class="btn" id="next3Btn" disabled>Next</button>
+      </section>
+
+      <!-- Screen 4: Click the correct link -->
+      <section id="s4" class="screen" aria-labelledby="s4h">
+        <h2 id="s4h">Links</h2>
+        <p>Click the <strong>blue link</strong> to go to the college website. Then press <strong>Next</strong>.</p>
+        <button class="option" id="weatherBtn">Local weather today</button>
+        <button class="option" id="collegeBtn"><span class="fake-link">New City College Courses</span></button>
+        <button class="option" id="catBtn">Funny cat videos</button>
+        <button class="btn" id="next4Btn">Next</button>
+      </section>
+
+      <!-- Screen 5: Fake email -->
+      <section id="s5" class="screen" aria-labelledby="s5h">
+        <h2 id="s5h">Email</h2>
+        <p>Click <strong>Reply</strong> and type <em>Hello teacher</em>. Then click <strong>Send</strong>.</p>
+        <button class="btn" id="replyBtn">Reply</button>
+        <textarea id="replyText" class="field" rows="2" style="display:none;"></textarea>
+        <button class="btn" id="sendBtn" disabled style="display:none;">Send</button>
+        <button class="btn" id="next5Btn">Next</button>
+      </section>
+
+      <!-- Screen 6: Upload simulated -->
+      <section id="s6" class="screen" aria-labelledby="s6h">
+        <h2 id="s6h">Upload a file</h2>
+        <input id="fileInput" type="file" aria-label="Upload a file">
+        <button class="btn" id="next6Btn">Next</button>
+      </section>
+
+      <!-- Screen 7: Safety choice -->
+      <section id="s7" class="screen" aria-labelledby="s7h">
+        <h2 id="s7h">Online Safety</h2>
+        <p>
+        <strong>Rubric – Online Safety:</strong><br>
+        If a website asks for your <strong>bank number</strong> or private information, what is the safe thing to do? <br>
+        Choose the safest option, then press <strong>See result</strong>.
+        </p>
+        <button class="option" id="bankBtn">Type number</button>
+        <button class="option" id="closeBtn">Close window</button>
+        <button class="option" id="askBtn">Ask teacher</button>
+        <button class="btn" id="next7Btn">See result</button>
+      </section>
+
+      <!-- Screen 8: Result -->
+      <section id="s8" class="screen" aria-labelledby="s8h">
+        <h2 id="s8h">Your result</h2>
+        <p class="score" id="scoreText">Score 0 / 7</p>
+        <p id="levelText"><strong>Level</strong> </p>
+        <div id="detail"></div>
+        <div class="center" style="margin: 24px 0;">
+          <button class="btn" id="emailResultsBtn">Email Results to Teacher</button>
+        </div>
+        <div id="thanksMsg" style="display:none; margin-top: 18px;">
+          <h3>Thank you!</h3>
+          <p>You have finished the test.</p>
+          <p>Please tell your teacher that you have finished.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script>
+    // Simple navigation and scoring logic
+    const screens = [
+      "s0","s1","s2","s3","s4","s5","s6","s7","s8"
+    ].map(id=>document.getElementById(id));
+    let current = 0;
+    function show(idx) {
+      screens.forEach((s, i) => s.classList.toggle("active", i === idx));
+      current = idx;
+    }
+
+    // Screen 0: Start
+    const startBtn = document.getElementById("startBtn");
+    document.getElementById("studentName").addEventListener("input", checkStart);
+    document.getElementById("studentId").addEventListener("input", checkStart);
+    function checkStart() {
+      startBtn.disabled = !(document.getElementById("studentName").value && document.getElementById("studentId").value);
+    }
+    startBtn.addEventListener("click", ()=>show(1));
+
+    // Screen 1: Computer image
+    document.getElementById("phoneBtn").addEventListener("click", ()=>selectOption("phoneBtn"));
+    document.getElementById("computerBtn").addEventListener("click", ()=>selectOption("computerBtn"));
+    document.getElementById("carBtn").addEventListener("click", ()=>selectOption("carBtn"));
+    document.getElementById("next1Btn").addEventListener("click", ()=>show(2));
+    let result1 = false;
+    function selectOption(id) {
+      ["phoneBtn","computerBtn","carBtn"].forEach(btn=>document.getElementById(btn).setAttribute("aria-pressed","false"));
+      document.getElementById(id).setAttribute("aria-pressed","true");
+      result1 = (id==="computerBtn");
+    }
+
+    // Screen 2: Name input
+    document.getElementById("next2Btn").addEventListener("click", ()=>show(3));
+    let result2 = false;
+    document.getElementById("nameInput").addEventListener("input", ()=>{
+      result2 = !!document.getElementById("nameInput").value;
+    });
+
+    // Screen 3: Search
+    document.getElementById("searchBox").addEventListener("input", checkSearch);
+    function checkSearch() {
+      const v = document.getElementById("searchBox").value.toLowerCase().trim();
+      document.getElementById("next3Btn").disabled = !(v.includes("new city college"));
+      result3 = v.includes("new city college");
+    }
+    document.getElementById("next3Btn").addEventListener("click", ()=>show(4));
+    let result3 = false;
+
+    // Screen 4: Link click
+    document.getElementById("weatherBtn").addEventListener("click", ()=>setLink("weatherBtn"));
+    document.getElementById("collegeBtn").addEventListener("click", ()=>setLink("collegeBtn"));
+    document.getElementById("catBtn").addEventListener("click", ()=>setLink("catBtn"));
+    document.getElementById("next4Btn").addEventListener("click", ()=>show(5));
+    let result4 = false;
+    function setLink(id) {
+      ["weatherBtn","collegeBtn","catBtn"].forEach(btn=>document.getElementById(btn).setAttribute("aria-pressed","false"));
+      document.getElementById(id).setAttribute("aria-pressed","true");
+      result4 = (id==="collegeBtn");
+    }
+
+    // Screen 5: Email mock
+    document.getElementById("replyBtn").addEventListener("click", ()=>{
+      document.getElementById("replyText").style.display = "block";
+      document.getElementById("sendBtn").style.display = "inline-block";
+      document.getElementById("sendBtn").disabled = true;
+      document.getElementById("replyText").focus();
+    });
+    document.getElementById("replyText").addEventListener("input", ()=>{
+      let v = document.getElementById("replyText").value.toLowerCase().replace(/[^a-z]/g,"");
+      document.getElementById("sendBtn").disabled = !v.includes("helloteacher");
+      result5 = v.includes("helloteacher");
+    });
+    document.getElementById("sendBtn").addEventListener("click", ()=>{
+      // auto move to next screen after a short delay for realism
+      setTimeout(()=>show(6),300);
+    });
+    document.getElementById("next5Btn").addEventListener("click", ()=>show(6));
+    let result5 = false;
+
+    // Screen 6: File upload
+    document.getElementById("next6Btn").addEventListener("click", ()=>show(7));
+    let result6 = false;
+    document.getElementById("fileInput").addEventListener("change", ()=>{
+      result6 = document.getElementById("fileInput").files.length > 0;
+    });
+
+    // Screen 7: Safety
+    document.getElementById("bankBtn").addEventListener("click", ()=>setSafe("bankBtn"));
+    document.getElementById("closeBtn").addEventListener("click", ()=>setSafe("closeBtn"));
+    document.getElementById("askBtn").addEventListener("click", ()=>setSafe("askBtn"));
+    document.getElementById("next7Btn").addEventListener("click", ()=>{
+      computeScore();
+      show(8);
+    });
+    let result7 = false;
+    function setSafe(id) {
+      ["bankBtn","closeBtn","askBtn"].forEach(btn=>document.getElementById(btn).setAttribute("aria-pressed","false"));
+      document.getElementById(id).setAttribute("aria-pressed","true");
+      result7 = (id==="closeBtn"||id==="askBtn");
+    }
+
+    // Result screen email button
+    document.getElementById('emailResultsBtn').addEventListener('click', function() {
+      const teacherEmail = "atin.wickham@ncclondon.ac.uk";
+      const subject = "ESOL ICT Assessment Results";
+      const resultText = document.getElementById('detail').innerText;
+      const mailtoLink = "mailto:" + encodeURIComponent(teacherEmail)
+        + "?subject=" + encodeURIComponent(subject)
+        + "&body=" + encodeURIComponent(resultText);
+      window.location.href = mailtoLink;
+      setTimeout(function() {
+        document.getElementById('emailResultsBtn').style.display = 'none';
+        document.getElementById('thanksMsg').style.display = 'block';
+      }, 200);
+    });
+
+    // Scoring & summary
+    function computeScore() {
+      let score = [result1,result2,result3,result4,result5,result6,result7].filter(Boolean).length;
+      document.getElementById('scoreText').textContent = "Score "+score+" / 7";
+      let level = "";
+      if(score <= 2)      level = "Beginner (needs support)";
+      else if(score <= 4) level = "Entry 1";
+      else if(score <= 6) level = "Entry 2";
+      else                level = "Entry 3";
+      document.getElementById('levelText').innerHTML = "<strong>Level</strong> "+level;
+      document.getElementById('detail').innerText =
+        "Name: "+(document.getElementById("studentName").value || "")+"\n"+
+        "Student number: "+(document.getElementById("studentId").value || "")+"\n"+
+        "T1: Computer img: "+(result1?"✓":"✗")+"\n"+
+        "T2: Type name: "+(result2?"✓":"✗")+"\n"+
+        "T3: Search term: "+(result3?"✓":"✗")+"\n"+
+        "T4: Link click: "+(result4?"✓":"✗")+"\n"+
+        "T5: Email reply: "+(result5?"✓":"✗")+"\n"+
+        "T6: File uploaded: "+(result6?"✓":"✗")+"\n"+
+        "T7: Safety: "+(result7?"✓":"✗")+"\n"+
+        "Total score: "+score+" / 7\nLevel: "+level;
+    }
+  </script>
+</body>
+</html>
